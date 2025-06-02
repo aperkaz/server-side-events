@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page Title</title>
+    <link href=’https://fonts.googleapis.com/css?family=Abel’ rel=’stylesheet’>
+    <style>
+      body {
+        font-family: "Abel";
+        font-size: 22px;
+      }
+      .fade-in-text {
+        animation: fadeIn 0.6s;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h3>Server-Side-Event demo</h3>
+    <div id="placeholder"></div>
+  </body>
+  <script>
+    const evtSource = new EventSource("http://localhost:3030/events");
+    evtSource.onmessage = function (event) {
+      const node = document.createElement("span");
+      node.className = "fade-in-text";
+      node.textContent = ` ${event.data}`;
+      document.getElementById("placeholder").appendChild(node);
+    };
+
+    evtSource.onerror = function (event) {
+      console.error("SSE Error:", event);
+      evtSource.close();
+    };
+  </script>
+</html>
